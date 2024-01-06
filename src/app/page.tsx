@@ -44,11 +44,23 @@ const getQuestions = async (): Promise<Question[]> => {
     if (match) {
       currentQuestion = {
         id: parseInt(match[0]),
-        question: lines[i + 1],
         correctAnswer: "",
         incorrectAnswers: [],
+        question: "",
       };
-      questions.push(currentQuestion);
+
+      if (match?.index === 0) {
+        currentQuestion.question = lines[i + 1];
+        const isQuestion = match[0] === match.input;
+
+        if (isQuestion) {
+          questions.push(currentQuestion);
+        } else {
+          currentQuestion = questions[questions.length - 1];
+        }
+      } else {
+        questions[questions.length - 1].question += lines[i + 1];
+      }
     } else if (currentQuestion) {
       if (line.includes("√")) {
         currentQuestion.correctAnswer = lines[i + 1];
@@ -56,7 +68,9 @@ const getQuestions = async (): Promise<Question[]> => {
         currentQuestion.incorrectAnswers.push(lines[i + 1]);
       }
     }
+    // console.log(currentQuestion);
   }
+  console.log(questions);
   return questions;
 };
 
