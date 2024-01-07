@@ -88,7 +88,7 @@ const QuestionComponent = ({ questions }: Props) => {
           <div className="flex justify-between py-5 px-2 font-bold text-md">
             <p>Score: {score}</p>
           </div>
-          <h2 className="text-2xl text-center font-medium">{`Q${questions[curr].id}. ${questions[curr].question}`}</h2>
+          <h2 className="text-base text-center font-medium">{`Q${questions[curr].id}. ${questions[curr].question}`}</h2>
           {answers?.map((answer, i) => (
             <div key={answer} className="my-4">
               <button
