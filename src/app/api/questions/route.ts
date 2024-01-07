@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import path from "path";
 import { PdfReader } from "pdfreader";
-import fs from "fs";
-import questions from '../../../pdfs/UNEC_1.json'
 
 export interface Question {
   id: number;
@@ -12,10 +10,7 @@ export interface Question {
 }
 
 export async function GET(req: Request) {
-  // const { searchParams } = new URL(req.url);
-  // const questions = await getQuestions();
-  // const question = 
-  // console.log('rendered')
+  const questions = await getQuestions();
   return NextResponse.json(questions);
 }
 
