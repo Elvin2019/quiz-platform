@@ -14,38 +14,30 @@ export async function GET(req: Request) {
   return NextResponse.json(questions);
 }
 
-const filePath = path.join(process.cwd(), "src/pdfs/UNEC_1.pdf");
-let counter = 0;
 
-function readPdf(): Promise<string[]> {
+const readPdf = (): Promise<string[]> => {
   return new Promise((resolve, reject) => {
     const rows: string[] = [];
-
     const pdfReader = new PdfReader({});
-
+    const filePath = path.join(process.cwd(), "src/pdfs/UNEC_1.pdf");
     pdfReader.parseFileItems(filePath, (err, item) => {
       if (err) {
         reject(err);
         return;
       }
-
       if (!item) {
-        // End of file
-        // Process the extracted rows here
         resolve(rows);
         return;
       }
-
       if (item.text) {
-        // Store the extracted text rows
         rows.push(item.text);
       }
     });
   });
 }
 
- const getQuestions = async (): Promise<Question[]> => {
-  const lines: string[] = await readPdf();
+
+const extractQuestions = (lines: string[]): Question[] => {
   const regex = /\d+\./;
   const questions: Question[] = [];
   let currentQuestion: Question | null = null;
@@ -66,7 +58,6 @@ function readPdf(): Promise<string[]> {
         currentQuestion.question = lines[i + 1];
         const isQuestion = match[0] === match.input;
         c = true;
-
         if (isQuestion) {
           questions.push(currentQuestion);
         } else {
@@ -88,7 +79,9 @@ function readPdf(): Promise<string[]> {
       }
     }
   }
-  counter++;
-  console.log("rendered", counter);
   return questions;
+}
+ const getQuestions = async (): Promise<Question[]> => {
+  const lines: string[] = await readPdf();
+  return extractQuestions(lines);
 };

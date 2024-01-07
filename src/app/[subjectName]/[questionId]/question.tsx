@@ -38,10 +38,6 @@ const QuestionComponent = ({ questions }: Props) => {
   const handleNext = () => {
     setCurr((curr) => curr + 1);
     setSelected("");
-    console.log(curr);
-    // router.push(`/questions/${curr+2}`, {
-    //   scroll: false,
-    // });
     window.history.replaceState(null, "", `/questions/${curr + 2}`);
   };
 
@@ -55,7 +51,6 @@ const QuestionComponent = ({ questions }: Props) => {
       );
       setProgressValue((100 / questions.length) * (curr + 1));
     }
-    // setProgressValue((100 / limit) * (curr + 1));
   }, [curr, questions]);
   const handleShuffle = (element: string, array: string[]) => {
     const newArray = [...array, element];
@@ -64,16 +59,12 @@ const QuestionComponent = ({ questions }: Props) => {
   };
 
   const handleShowResult = async () => {
-    // await setShowResultScreen(true);
-    // router.push("/results");
   };
   const handleQuit = () => {
     router.push("/");
     setScore(0);
   };
-  {
-    // @ts-ignore
-  }
+ 
   return (
     <>
       <div className="wrapper">
@@ -106,7 +97,6 @@ const QuestionComponent = ({ questions }: Props) => {
               label={
                 questions.length - 1 != curr ? "Next Question" : "Show Results"
               }
-              // disabled={!selected}
               onClick={() =>
                 questions.length === curr + 1
                   ? handleShowResult()
