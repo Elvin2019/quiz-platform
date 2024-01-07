@@ -1,5 +1,3 @@
-import Image from "next/image";
-import fs from "fs/promises";
 import path from "path";
 import { PdfReader } from "pdfreader";
 
@@ -32,11 +30,12 @@ function readPdf(): Promise<string[]> {
   });
 }
 
-const getQuestions = async (): Promise<Question[]> => {
+export const getQuestions = async (): Promise<Question[]> => {
   const lines: string[] = await readPdf();
   const regex = /\d+\./;
   const questions: Question[] = [];
   let currentQuestion: Question | null = null;
+  let c = false;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -52,6 +51,7 @@ const getQuestions = async (): Promise<Question[]> => {
       if (match?.index === 0) {
         currentQuestion.question = lines[i + 1];
         const isQuestion = match[0] === match.input;
+        c=true;
 
         if (isQuestion) {
           questions.push(currentQuestion);
@@ -59,25 +59,30 @@ const getQuestions = async (): Promise<Question[]> => {
           currentQuestion = questions[questions.length - 1];
         }
       } else {
+        c=false;
         questions[questions.length - 1].question += lines[i + 1];
       }
     } else if (currentQuestion) {
       if (line.includes("√")) {
+        c=false;
         currentQuestion.correctAnswer = lines[i + 1];
       } else if (line.includes("•")) {
+        c=false;
         currentQuestion.incorrectAnswers.push(lines[i + 1]);
+      }else if(c) {
+        currentQuestion.question += lines[i];
       }
     }
-    // console.log(currentQuestion);
   }
-  console.log(questions);
+  console.log('rendered');
   return questions;
 };
 
 export default async function Home() {
   const questions = await getQuestions();
   return questions.map((question) => {
-    return <div style={{ border: "1px solid black" }}>{question.question}</div>;
+    return <div style={{ border: "1px solid black" }}>{question.id 
+    + ". " + question.question}</div>;
   });
 }
 

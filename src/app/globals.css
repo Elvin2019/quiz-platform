@@ -2,26 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-} */
+.wrapper {
+  @apply min-h-screen w-full bg-gray-300 flex items-center justify-center;
+}
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.heading {
+  @apply text-4xl font-bold tracking-widest text-center py-4;
+}
+
+.option.correct {
+  @apply text-white bg-green-500;
+}
+
+.option.incorrect {
+  @apply text-white bg-red-500;
+}
+
+.option {
+  @apply text-black bg-white shadow-md rounded-md text-xl py-4 px-2 cursor-pointer disabled:cursor-default;
+}
+
+.divider {
+  @apply bg-gray-300 rounded-lg h-1 w-full;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #565050;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f9ecec;
+  border-radius: 10px;
 }
