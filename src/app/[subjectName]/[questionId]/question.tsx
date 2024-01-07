@@ -71,6 +71,9 @@ const QuestionComponent = ({ questions }: Props) => {
     router.push("/");
     setScore(0);
   };
+  {
+    // @ts-ignore
+  }
   return (
     <>
       <div className="wrapper">
@@ -118,7 +121,9 @@ const QuestionComponent = ({ questions }: Props) => {
           </div>
         </div>
       </div>
+      
       <ConfirmDialog
+      content={undefined}
         visible={toggle}
         onHide={() => setToggle(false)}
         message="Your Progress will be lost, Are you Sure?"
