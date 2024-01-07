@@ -1,10 +1,12 @@
 "use client";
+
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { alphabeticNumeral } from "@/constants/index";
 import { Button } from "primereact/button";
 import { ProgressBar } from "primereact/progressbar";
 import { Question } from "../../api/questions/route";
+import { ConfirmDialog } from "primereact/confirmdialog";
 
 interface Props {
   questions: Question[];
@@ -18,7 +20,7 @@ const QuestionComponent = ({ questions }: Props) => {
   const [toggle, setToggle] = useState(false);
   const [progressValue, setProgressValue] = useState(0);
   const router = useRouter();
-
+  const [score, setScore] = useState(0);
 
   const handleSelect = (i: string) => {
     if (selected === i && selected === questions[curr].correctAnswer)
@@ -30,7 +32,7 @@ const QuestionComponent = ({ questions }: Props) => {
 
   const handleCheck = (answer: string) => {
     setSelected(answer);
-    // if (answer === questions[curr].correctAnswer) setScore(score + 1);
+    if (answer === questions[curr].correctAnswer) setScore(score + 1);
   };
 
   const handleNext = () => {
@@ -67,11 +69,12 @@ const QuestionComponent = ({ questions }: Props) => {
   };
   const handleQuit = () => {
     router.push("/");
+    setScore(0);
   };
   return (
     <>
       <div className="wrapper">
-        <div className="bg-white px-4 shadow-md w-full md:w-[80%] lg:w-[70%] max-w-5xl rounded-md">
+        <div className="bg-white px-4 shadow-md w-full md:w-[90%] rounded-md">
           <h1 className="heading">Quizy</h1>
           <ProgressBar
             value={progressValue}
@@ -79,6 +82,9 @@ const QuestionComponent = ({ questions }: Props) => {
             style={{ height: "10px" }}
             color={progressValue === 100 ? "green" : "blue"}
           />
+          <div className="flex justify-between py-5 px-2 font-bold text-md">
+            <p>Score: {score}</p>
+          </div>
           <h2 className="text-2xl text-center font-medium">{`Q${questions[curr].id}. ${questions[curr].question}`}</h2>
           {answers?.map((answer, i) => (
             <div key={answer} className="my-4">
@@ -92,7 +98,7 @@ const QuestionComponent = ({ questions }: Props) => {
               </button>
             </div>
           ))}
-          <div className="flex mt-5 md:justify-between md:flex-row flex-col gap-4 md:gap-0 mx-auto max-w-xs w-full">
+          <div className="flex m-10 md:justify-between md:flex-row flex-col gap-4 md:gap-0 mx-auto max-w-xs w-full">
             <Button
               label={
                 questions.length - 1 != curr ? "Next Question" : "Show Results"
@@ -112,6 +118,14 @@ const QuestionComponent = ({ questions }: Props) => {
           </div>
         </div>
       </div>
+      <ConfirmDialog
+        visible={toggle}
+        onHide={() => setToggle(false)}
+        message="Your Progress will be lost, Are you Sure?"
+        header="Confirmation"
+        accept={handleQuit}
+        reject={() => setToggle(false)}
+      />
     </>
   );
 };

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Open_Sans } from "next/font/google";
-import './globals.css'
+import "./globals.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
 
 const inter = Open_Sans({ subsets: ['latin'] })
 
