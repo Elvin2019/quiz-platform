@@ -25,7 +25,7 @@
 }
 
 .option {
-  @apply text-black bg-white shadow-md rounded-md text-xl py-4 px-2 cursor-pointer disabled:cursor-default;
+  @apply text-black bg-white shadow-md rounded-md text-xl py-4 px-2 cursor-pointer disabled:cursor-default w-full text-left
 }
 
 .divider {

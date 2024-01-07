@@ -1,10 +1,10 @@
 "use client";
-import { Question } from "@/src/app/page";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { alphabeticNumeral } from "@/constants/index";
 import { Button } from "primereact/button";
 import { ProgressBar } from "primereact/progressbar";
+import { Question } from "../../api/questions/route";
 
 interface Props {
   questions: Question[];
@@ -17,6 +17,8 @@ const QuestionComponent = ({ questions }: Props) => {
   const [selected, setSelected] = useState<string | undefined>();
   const [toggle, setToggle] = useState(false);
   const [progressValue, setProgressValue] = useState(0);
+  const router = useRouter();
+
 
   const handleSelect = (i: string) => {
     if (selected === i && selected === questions[curr].correctAnswer)
@@ -34,6 +36,11 @@ const QuestionComponent = ({ questions }: Props) => {
   const handleNext = () => {
     setCurr((curr) => curr + 1);
     setSelected("");
+    console.log(curr);
+    // router.push(`/questions/${curr+2}`, {
+    //   scroll: false,
+    // });
+    window.history.replaceState(null, "", `/questions/${curr + 2}`);
   };
 
   useEffect(() => {
@@ -57,6 +64,9 @@ const QuestionComponent = ({ questions }: Props) => {
   const handleShowResult = async () => {
     // await setShowResultScreen(true);
     // router.push("/results");
+  };
+  const handleQuit = () => {
+    router.push("/");
   };
   return (
     <>
@@ -87,7 +97,7 @@ const QuestionComponent = ({ questions }: Props) => {
               label={
                 questions.length - 1 != curr ? "Next Question" : "Show Results"
               }
-              disabled={!selected}
+              // disabled={!selected}
               onClick={() =>
                 questions.length === curr + 1
                   ? handleShowResult()
